@@ -1,0 +1,53 @@
+{
+  "name": "bottle",
+  "owner": {
+    "name": "Cloud Atlas AI",
+    "email": "hello@cloudatlas.ai"
+  },
+  "metadata": {
+    "description": "Cloud Atlas AI - Complete stack for 10-100x AI leverage",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "ba",
+      "source": "./plugins/ba",
+      "description": "Task tracking for AI sessions",
+      "author": {
+        "name": "Cloud Atlas AI"
+      }
+    },
+    {
+      "name": "wm",
+      "source": "./plugins/wm",
+      "description": "Working memory - automatic tacit knowledge extraction",
+      "author": {
+        "name": "Cloud Atlas AI"
+      }
+    },
+    {
+      "name": "superego",
+      "source": "./plugins/superego",
+      "description": "Metacognitive advisor",
+      "author": {
+        "name": "Cloud Atlas AI"
+      }
+    },
+    {
+      "name": "oh-mcp",
+      "source": "./plugins/oh-mcp",
+      "description": "Open Horizons MCP - strategic alignment",
+      "author": {
+        "name": "Cloud Atlas AI"
+      }
+    },
+    {
+      "name": "miranda",
+      "source": "./plugins/miranda",
+      "description": "Telegram bot for remote orchestration",
+      "author": {
+        "name": "Cloud Atlas AI"
+      }
+    }
+  ]
+}

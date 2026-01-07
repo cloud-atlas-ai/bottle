@@ -1,110 +1,120 @@
 # Bottle
 
-**Cloud Atlas AI Core Stack - Keep your tools in sync**
+**Cloud Atlas AI Marketplace - One entry point for all the tools**
 
-Unified installation and updates for the Cloud Atlas AI development stack:
+Bottle is a Claude Code plugin marketplace that provides access to the complete Cloud Atlas AI stack:
 
 - **ba** - Task tracking for AI sessions
 - **wm** - Working memory for automatic tacit knowledge extraction
-- **superego** - Metacognitive advisor that monitors and provides feedback
+- **superego** - Metacognitive advisor
+- **oh-mcp** - Open Horizons MCP for strategic alignment
+- **miranda** - Telegram bot for remote orchestration
 
-## Quick Start
+## Installation
+
+### 1. Add the Marketplace
 
 ```bash
-# Clone and install
-git clone https://github.com/cloud-atlas-ai/bottle
-cd bottle
-./scripts/install.sh
-
-# Later, update everything
-./scripts/update.sh
+claude plugin marketplace add cloud-atlas-ai/bottle
 ```
 
-## What Gets Installed
+### 2. Install Plugins
 
-### ba - Task Tracking
-Simple, file-based task tracking designed for AI sessions. No server, no database, just tasks.
+Install any or all:
 
+```bash
+claude plugin install ba@bottle
+claude plugin install wm@bottle
+claude plugin install superego@bottle
+claude plugin install oh-mcp@bottle
+claude plugin install miranda@bottle
+```
+
+### 3. Initialize in Your Project
+
+Each plugin provides init commands:
+
+```bash
+# In Claude Code:
+/ba:init
+/superego:init
+# ... etc
+```
+
+Or via CLI:
 ```bash
 ba init
-ba create "Add feature X" -t feature -p 1
-ba claim <task-id> --session $(uuidgen)
+wm init
+sg init
 ```
 
-More: [github.com/cloud-atlas-ai/ba](https://github.com/cloud-atlas-ai/ba)
+The init commands check for binaries and offer to install them if missing.
+
+## Core Stack
+
+Start with these three for immediate 10-100x leverage:
+
+```bash
+claude plugin marketplace add cloud-atlas-ai/bottle
+claude plugin install ba@bottle
+claude plugin install wm@bottle
+claude plugin install superego@bottle
+```
+
+Then in your project:
+```bash
+/ba:init
+/superego:init
+```
+
+wm works automatically once installed.
+
+## What Each Tool Does
+
+### ba - Task Tracking
+Simple, file-based task tracking. No server, no database.
+
+**Commands:** `/ba:init`, `/ba:quickstart`, `/ba:status`
 
 ### wm - Working Memory
-Automatically extracts tacit knowledge from your coding sessions and surfaces relevant context.
+Automatically captures tacit knowledge from sessions and injects relevant context.
 
-```bash
-wm init
-# Works automatically with Claude Code
-# Captures patterns, constraints, preferences over time
-```
+**Setup:** Installs plugin + binary, works automatically
 
-More: [github.com/cloud-atlas-ai/wm](https://github.com/cloud-atlas-ai/wm)
-
-### superego - Metacognition
+### superego - Metacognition  
 Monitors Claude's work and provides feedback before finishing or making large changes.
 
-```bash
-sg init
-# Or in Claude Code: /superego:init
-# Evaluates approach, catches scope drift, suggests improvements
-```
+**Commands:** `/superego:init`, `/superego:review`, `/superego:prompt`
 
-More: [github.com/cloud-atlas-ai/superego](https://github.com/cloud-atlas-ai/superego)
+### oh-mcp - Strategic Alignment
+Connects Claude Code to Open Horizons for strategic context.
 
-## How They Work Together
+**Setup:** `/oh-mcp:setup` (requires OH account + API key)
 
-```
-You write prompt → wm injects relevant context
-                ↓
-Claude works on task (tracked in ba)
-                ↓
-superego evaluates before finishing
-                ↓
-wm extracts new knowledge for next time
-```
+### miranda - Remote Orchestration
+Telegram bot for running Claude sessions remotely.
 
-## Installation Details
-
-**What install.sh does:**
-1. Checks prerequisites (Rust/cargo, Claude CLI)
-2. Installs ba, wm, superego via `cargo install`
-3. Installs Claude Code plugins (if Claude CLI available)
-4. Provides next steps
-
-**Per-project setup:**
-```bash
-cd /your/project
-ba init       # Creates .ba/ for task tracking
-wm init       # Creates .wm/ for working memory
-sg init       # Creates .superego/ for metacognition
-```
+**Setup:** Server component, see [miranda docs](https://github.com/cloud-atlas-ai/miranda)
 
 ## Updating
 
-Keep all tools in sync:
-
 ```bash
-./scripts/update.sh
+claude plugin marketplace update bottle
+claude plugin update superego@bottle
+claude plugin update wm@bottle
+# ... etc
 ```
 
-This updates:
-- All binaries (`cargo install --force`)
-- All Claude plugins
-- Prompts you to restart Claude Code
+## Individual Repos
 
-## Other Tools
+Each tool has its own repo with detailed documentation:
 
-Bottle focuses on the core development stack. Other Cloud Atlas AI tools:
-
-- **oh-mcp** - Open Horizons MCP for strategic alignment ([repo](https://github.com/cloud-atlas-ai/oh-mcp-server))
-- **miranda** - Telegram bot for remote orchestration ([repo](https://github.com/cloud-atlas-ai/miranda))
-
-Install these separately when needed.
+- [ba](https://github.com/cloud-atlas-ai/ba)
+- [wm](https://github.com/cloud-atlas-ai/wm)
+- [superego](https://github.com/cloud-atlas-ai/superego)
+- [oh-mcp-server](https://github.com/cloud-atlas-ai/oh-mcp-server)
+- [miranda](https://github.com/cloud-atlas-ai/miranda)
 
 ## License
 
-Source-available. See [LICENSE](LICENSE) for details.
+Source-available. See individual repos for license details.
