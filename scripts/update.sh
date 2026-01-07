@@ -62,6 +62,30 @@ update_plugins() {
     fi
 }
 
+# Update Codex skills
+update_codex_skills() {
+    if ! has_command codex; then
+        return 0
+    fi
+
+    log "Updating Codex skills..."
+
+    for tool in ba superego; do
+        local skill_dir="$HOME/.codex/skills/$tool"
+        if [ -d "$skill_dir" ]; then
+            log "Updating $tool Codex skill..."
+            if curl -fsSL -o "$skill_dir/SKILL.md" \
+                "https://raw.githubusercontent.com/cloud-atlas-ai/$tool/main/codex-skill/SKILL.md" 2>/dev/null || \
+               curl -fsSL -o "$skill_dir/SKILL.md" \
+                "https://raw.githubusercontent.com/cloud-atlas-ai/$tool/master/codex-skill/SKILL.md" 2>/dev/null; then
+                info "✓ $tool Codex skill updated"
+            else
+                warn "Failed to update $tool Codex skill"
+            fi
+        fi
+    done
+}
+
 main() {
     echo ""
     log "Updating Cloud Atlas AI tools..."
@@ -76,6 +100,11 @@ main() {
 
     # Update plugins
     update_plugins
+
+    echo ""
+
+    # Update Codex skills
+    update_codex_skills
 
     echo ""
     log "Update complete!"

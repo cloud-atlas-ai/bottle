@@ -1,6 +1,6 @@
 #!/bin/bash
 # Bottle installer - Cloud Atlas AI core stack
-# Installs: ba, wm, superego
+# Installs: ba, wm, superego (binaries + plugins + codex skills)
 
 set -e
 
@@ -30,9 +30,13 @@ check_prereqs() {
     fi
 
     if ! has_command claude; then
-        warn "claude CLI not found. Install from: https://claude.com/code"
-        warn "Continuing with binary installation only..."
+        warn "Claude CLI not found. Skipping Claude plugin installation..."
         SKIP_PLUGINS=1
+    fi
+
+    # Check for codex (optional)
+    if has_command codex; then
+        INSTALL_CODEX_SKILLS=1
     fi
 }
 
@@ -77,6 +81,30 @@ install_plugin() {
     fi
 }
 
+# Install Codex skill for a tool
+install_codex_skill() {
+    local name="$1"
+
+    if [ "$INSTALL_CODEX_SKILLS" != "1" ]; then
+        return 0
+    fi
+
+    log "Installing $name Codex skill..."
+
+    local skill_dir="$HOME/.codex/skills/$name"
+    mkdir -p "$skill_dir"
+
+    # Download skill files from GitHub (try main, then master branch)
+    if curl -fsSL -o "$skill_dir/SKILL.md" \
+        "https://raw.githubusercontent.com/cloud-atlas-ai/$name/main/codex-skill/SKILL.md" 2>/dev/null || \
+       curl -fsSL -o "$skill_dir/SKILL.md" \
+        "https://raw.githubusercontent.com/cloud-atlas-ai/$name/master/codex-skill/SKILL.md" 2>/dev/null; then
+        info "✓ $name Codex skill installed"
+    else
+        warn "Failed to download $name Codex skill (not published yet)"
+    fi
+}
+
 # Main installation
 main() {
     echo ""
@@ -100,6 +128,14 @@ main() {
     install_plugin "wm"
 
     echo ""
+    log "Installing Codex skills..."
+    echo ""
+
+    # Install Codex skills (ba and superego have them, wm doesn't)
+    install_codex_skill "ba"
+    install_codex_skill "superego"
+
+    echo ""
     log "Installation complete!"
     echo ""
     info "Next steps:"
@@ -111,6 +147,10 @@ main() {
     info "Or use Claude Code commands:"
     info "  /superego:init"
     echo ""
+    if [ "$INSTALL_CODEX_SKILLS" = "1" ]; then
+        info "Codex users can use: \$ba, \$superego skills"
+        echo ""
+    fi
     info "To update: ./scripts/update.sh"
     info "Learn more: https://github.com/cloud-atlas-ai/bottle"
     echo ""
