@@ -87,11 +87,14 @@ This project uses Cloud Atlas AI tools. Follow these protocols:
 
 ## Metacognition (superego)
 
+**Mode:** Pull mode - evaluates only when explicitly requested, not automatically.
+
 **When to use:**
-- Superego evaluates automatically when sessions go idle
+- Before committing significant work: Proactively request evaluation
+- When uncertain about approach: Ask for feedback
 - If you receive SUPEREGO FEEDBACK: critically evaluate it and either incorporate or escalate to user
 
-**Protocol:** Take superego feedback seriously. It catches premature commitment, scope creep, and misalignment.
+**Protocol:** Superego is opt-in. Use it for high-stakes decisions, architectural choices, or when you want a second opinion. It catches premature commitment, scope creep, and misalignment.
 `;
             writeFileSync(agentsFile, content);
             results.push("✓ AGENTS.md created");
