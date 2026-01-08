@@ -62,19 +62,36 @@ const Bottle: Plugin = async ({ directory }) => {
           if (!existsSync(agentsFile)) {
             const content = `# Cloud Atlas AI Stack
 
-Initialized with bottle.
+This project uses Cloud Atlas AI tools. Follow these protocols:
 
-## Tools Available
+## Task Tracking (ba)
 
-- **ba**: Task tracking for multi-agent workflows
-- **wm**: Working memory for knowledge accumulation
-- **superego**: Metacognitive advisor for session evaluation
+**When to use:**
+- At session start: Use \`ba-status\` to see active tasks
+- Before starting work: Use \`ba list\` to check what's ready
+- When creating tasks: Use \`ba create\` for each distinct piece of work
+- During work: Use \`ba claim\` to take ownership, \`ba finish\` when done
+- For dependencies: Use \`ba block\` to mark blockers
 
-## Usage
+**Protocol:** Always track non-trivial work in ba. If a task has multiple steps or will take >5 minutes, create a task.
 
-- Task tracking: Use ba tools (ba-init, ba-status, ba-quickstart)
-- Working memory: Use wm tool with commands (init, show, compile, distill)
-- Metacognition: Use superego tool (status, init, enable, disable)
+## Working Memory (wm)
+
+**When to use:**
+- When you need context: Use \`wm compile\` to get relevant knowledge for current work
+- If you don't know why/how something works: Check \`wm show state\` or encourage user to prep a dive pack
+- After completing work: Use \`wm distill\` to extract learnings from the session
+- Before answering questions about past work: Check \`wm compile\` first
+
+**Protocol:** Treat wm as your external memory. Don't guess at past decisions - check wm first.
+
+## Metacognition (superego)
+
+**When to use:**
+- Superego evaluates automatically when sessions go idle
+- If you receive SUPEREGO FEEDBACK: critically evaluate it and either incorporate or escalate to user
+
+**Protocol:** Take superego feedback seriously. It catches premature commitment, scope creep, and misalignment.
 `;
             writeFileSync(agentsFile, content);
             results.push("✓ AGENTS.md created");
