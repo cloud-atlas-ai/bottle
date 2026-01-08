@@ -45,9 +45,14 @@ const Bottle: Plugin = async ({ directory }) => {
             results.push("✓ wm already initialized");
           }
 
-          // Initialize superego (via superego tool, not CLI)
+          // Initialize superego
           if (!existsSync(join(directory, ".superego"))) {
-            results.push("⚠ superego not initialized - use 'superego init' tool");
+            try {
+              const sg = spawnSync("sg", ["init"], { cwd: directory, encoding: "utf-8" });
+              results.push(sg.status === 0 ? "✓ superego initialized" : `✗ superego init failed: ${sg.stderr}`);
+            } catch (e) {
+              results.push(`✗ superego init failed: ${e}`);
+            }
           } else {
             results.push("✓ superego already initialized");
           }
