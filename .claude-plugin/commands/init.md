@@ -42,7 +42,7 @@ Create AGENTS.md with guidance for all initialized tools:
 ## Step 4: Confirm completion
 
 Tell user:
-```
+```bash
 ✓ Bottle initialization complete
 
 Initialized:
