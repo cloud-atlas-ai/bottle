@@ -17,9 +17,9 @@
   "repository": "https://github.com/cloud-atlas-ai/bottle",
   "license": "MIT",
   "dependencies": {
-    "ba-opencode": "file:../../ba/opencode-plugin",
-    "wm-opencode": "file:../../wm/opencode-plugin",
-    "superego-opencode": "file:../../superego/opencode-plugin"
+    "ba-opencode": "*",
+    "wm-opencode": "*",
+    "superego-opencode": "*"
   },
   "devDependencies": {
     "@opencode-ai/plugin": "^1.0.61",

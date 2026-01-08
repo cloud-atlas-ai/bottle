@@ -108,7 +108,14 @@ If you only want one tool, install from their respective repos:
 
 ## Architecture
 
-Bottle bundles all three plugins in a single npm package. Each plugin:
+Bottle is a meta-package that depends on the individually published plugins:
+- `ba-opencode` - Task tracking plugin
+- `wm-opencode` - Working memory plugin
+- `superego-opencode` - Metacognition plugin
+
+Each plugin can be published and versioned independently. Bottle simply re-exports them for convenience.
+
+Each plugin:
 - Provides OpenCode tools
 - Injects soft hints via `experimental.chat.system.transform`
 - Registers event hooks where needed (superego uses `session.idle`)
