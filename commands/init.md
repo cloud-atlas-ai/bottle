@@ -7,17 +7,19 @@ Initialize all installed Cloud Atlas AI tools with recommended defaults.
 Run the init command for each installed tool:
 
 **ba:**
-- Call `/ba:init` if ba plugin is installed
-- This handles ba binary installation, project setup, and AGENTS.md
+- Check if ba binary exists: `command -v ba`
+- If yes and `.ba/` doesn't exist, run: `ba init`
+- This creates `.ba/` directory and initial configuration
 
 **superego:**
-- Call `/superego:init` if superego plugin is installed
-- This handles sg binary installation and project setup
+- Check if sg binary exists: `command -v sg`
+- If yes and `.superego/` doesn't exist, run: `sg init`
+- This creates `.superego/` directory and sets up metacognitive monitoring
 
 **wm:**
 - Check if wm binary exists: `command -v wm`
 - If yes and `.wm/` doesn't exist, run: `wm init`
-- wm works automatically once installed - no separate plugin commands needed
+- This creates `.wm/` directory and enables working memory capture
 
 ## Step 2: Apply recommended defaults
 
@@ -30,12 +32,12 @@ After individual inits complete:
 - Command: `sed -i.bak 's/^mode: always/mode: pull/' .superego/config.yaml && rm .superego/config.yaml.bak`
 - Explain: "Pull mode is less intrusive - superego reviews when you request it or before commits/PRs, rather than at every checkpoint"
 
-## Step 3: Verify AGENTS.md
+## Step 3: Create/update AGENTS.md
 
-Check if AGENTS.md has guidance for all initialized tools:
-- `/ba:init` should have added ba section
-- Verify it's present and complete
-- If anything is missing, offer to update
+Create AGENTS.md with guidance for all initialized tools:
+- Add sections for ba, wm, and superego
+- Include "When to use" and "Protocol" guidance for each
+- If AGENTS.md already exists, preserve user content while updating tool sections
 
 ## Step 4: Confirm completion
 
