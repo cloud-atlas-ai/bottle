@@ -124,9 +124,9 @@ const Bottle: Plugin = async ({ directory }) => {
             results.push("✓ superego already initialized");
           }
 
-          // Create/update AGENTS.md
+          // Handle AGENTS.md - create if missing, provide template for merge if exists
           const agentsFile = join(directory, "AGENTS.md");
-          const content = `# Cloud Atlas AI Stack
+          const agentsContent = `# Cloud Atlas AI Stack
 
 This project uses Cloud Atlas AI tools. Follow these protocols:
 
@@ -162,8 +162,20 @@ This project uses Cloud Atlas AI tools. Follow these protocols:
 
 **Protocol:** Superego is opt-in. Use it for high-stakes decisions, architectural choices, or when you want a second opinion. It catches premature commitment, scope creep, and misalignment.
 `;
-          writeFileSync(agentsFile, content);
-          results.push("✓ AGENTS.md created/updated");
+
+          if (!existsSync(agentsFile)) {
+            // File doesn't exist - create it
+            writeFileSync(agentsFile, agentsContent);
+            results.push("✓ AGENTS.md created");
+          } else {
+            // File exists - provide template for AI to merge
+            results.push("");
+            results.push("AGENTS.md exists. AI: update these sections while preserving other content:");
+            results.push("");
+            results.push("```markdown");
+            results.push(agentsContent);
+            results.push("```");
+          }
 
           return results.join("\n");
         },
