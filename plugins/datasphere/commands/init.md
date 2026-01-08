@@ -45,14 +45,14 @@ This runs continuously and:
 - Automatically processes new and modified sessions
 - Builds the knowledge graph in `~/.datasphere/`
 
-Note: `ds scan` only processes the current project once. For ongoing knowledge graph updates across all projects, use `ds start`.
+Note: `ds scan` only processes a single session (not a full project scan). For proper workflow, always use `ds start` to run in daemon mode.
 
 ## Step 4: Confirm
 
 Tell user datasphere is now running. They can:
 - `ds query "your question"` - Search the knowledge graph
 - `ds stats` - View database statistics
-- `ds scan` - One-shot scan of current project only
+- `ds scan` - One-shot scan of a single session only
 
 ---
 Be concise. Detect what's available, offer appropriate options, guide user through setup.
