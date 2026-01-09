@@ -4,22 +4,14 @@
  * Two things:
  * 1. npm meta-package - pulls in ba-opencode, wm-opencode, superego-opencode as dependencies
  * 2. OpenCode plugin - provides setup/orchestration tools (bottle-init, bottle-install, bottle-status)
- *    AND re-exports child plugins so users get all tools in one package
+ *    bottle-init updates opencode.json to add child plugins automatically
  */
 
 import type { Plugin } from "@opencode-ai/plugin";
 import { tool } from "@opencode-ai/plugin";
-import { existsSync, writeFileSync } from "fs";
+import { existsSync, writeFileSync, readFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
-
-// Import child plugins to re-export
-// @ts-expect-error - ba-opencode doesn't generate .d.ts files yet
-import BA from "ba-opencode";
-// @ts-expect-error - wm-opencode doesn't generate .d.ts files yet
-import WM from "wm-opencode";
-// @ts-expect-error - superego-opencode doesn't generate .d.ts files yet
-import Superego from "superego-opencode";
 
 // Helper: Check if a binary is available
 function checkBinary(name: string): boolean {
@@ -47,6 +39,29 @@ const BottleOrchestration: Plugin = async ({ directory }) => {
         args: {},
         async execute() {
           const results: string[] = [];
+
+          // Step 1: Check if child plugins are in opencode.json
+          const opencodeConfigPath = join(directory, "opencode.json");
+          if (existsSync(opencodeConfigPath)) {
+            try {
+              const configContent = readFileSync(opencodeConfigPath, "utf-8");
+              const config = JSON.parse(configContent);
+              const childPlugins = ["ba-opencode", "wm-opencode", "superego-opencode"];
+              const pluginArray = Array.isArray(config.plugin) ? config.plugin : [];
+
+              const missingPlugins = childPlugins.filter(p => !pluginArray.includes(p));
+
+              if (missingPlugins.length > 0) {
+                results.push("⚠️  Child plugins missing from opencode.json");
+                results.push("");
+                results.push(`AI: Add ${missingPlugins.join(", ")} to the plugin array in opencode.json, then tell the user to restart OpenCode and run bottle-init again.`);
+                return results.join("\n");
+              }
+            } catch (e) {
+              results.push(`⚠️  Could not read opencode.json: ${e}`);
+              results.push("");
+            }
+          }
 
           // Check which binaries are available
           const binaries = {
@@ -137,39 +152,35 @@ const BottleOrchestration: Plugin = async ({ directory }) => {
           const agentsFile = join(directory, "AGENTS.md");
           const agentsContent = `# Cloud Atlas AI Stack
 
-This project uses Cloud Atlas AI tools. Follow these protocols:
+This project uses Cloud Atlas AI tools integrated with OpenCode.
 
 ## Task Tracking (ba)
 
-**When to use:**
-- At session start: Use \`ba-status\` to see active tasks
-- Before starting work: Use \`ba list\` to check what's ready
-- When creating tasks: Use \`ba create\` for each distinct piece of work
-- During work: Use \`ba claim\` to take ownership, \`ba finish\` when done
-- For dependencies: Use \`ba block\` to mark blockers
+**Available tools:** ba-status, ba-list, ba-create, ba-claim, ba-finish, ba-block
 
-**Protocol:** Always track non-trivial work in ba. If a task has multiple steps or will take >5 minutes, create a task.
+**Protocol:**
+- At session start: Check ba-status for active tasks
+- Track non-trivial work (multi-step or >5 minutes) as ba tasks
+- Claim tasks before starting work, finish when done
 
 ## Working Memory (wm)
 
-**When to use:**
-- When you need context: Use \`wm compile\` to get relevant knowledge for current work
-- If you don't know why/how something works: Check \`wm show state\` or encourage user to prep a dive pack
-- After completing work: Use \`wm distill\` to extract learnings from the session
-- Before answering questions about past work: Check \`wm compile\` first
+**Available tools:** wm compile, wm show (state|working|sessions), wm distill, wm compress
 
-**Protocol:** Treat wm as your external memory. Don't guess at past decisions - check wm first.
+**Protocol:**
+- Use wm compile to get relevant context for current work
+- If you don't know why/how something works: Check wm show state or encourage user to prep a dive pack
+- After completing work: Use wm distill to extract learnings
+- Working memory accumulates tacit knowledge across sessions automatically
 
 ## Metacognition (superego)
 
-**Mode:** Pull mode - evaluates only when explicitly requested, not automatically.
+**Available tools:** sg-review, sg-mode
 
-**When to use:**
-- Before committing significant work: Proactively request evaluation
-- When uncertain about approach: Ask for feedback
-- If you receive SUPEREGO FEEDBACK: critically evaluate it and either incorporate or escalate to user
-
-**Protocol:** Superego is opt-in. Use it for high-stakes decisions, architectural choices, or when you want a second opinion. It catches premature commitment, scope creep, and misalignment.
+**Protocol:**
+- Superego is in pull mode - only runs when explicitly requested
+- Use sg-review before major decisions or when uncertain about approach
+- Review feedback critically and incorporate or discuss with user
 `;
 
           if (!existsSync(agentsFile)) {
@@ -184,6 +195,37 @@ This project uses Cloud Atlas AI tools. Follow these protocols:
             results.push("```markdown");
             results.push(agentsContent);
             results.push("```");
+          }
+
+          // Install key commands in .opencode/command/
+          const commandDir = join(directory, ".opencode", "command");
+          if (!existsSync(commandDir)) {
+            results.push("");
+            results.push("AI: Create .opencode/command/ directory and add these key commands:");
+            results.push("");
+            results.push("📝 .opencode/command/superego-review.md:");
+            results.push("```markdown");
+            results.push("# Superego Review");
+            results.push("");
+            results.push("Run metacognitive review of current work:");
+            results.push("1. Use sg-review to get feedback on current approach");
+            results.push("2. Review the feedback critically");
+            results.push("3. Either incorporate suggestions or discuss with user if feedback seems off-track");
+            results.push("```");
+            results.push("");
+            results.push("📝 .opencode/command/wm-dive-prep.md:");
+            results.push("```markdown");
+            results.push("# WM Dive Prep");
+            results.push("");
+            results.push("Prepare a grounded dive session with context from multiple sources:");
+            results.push("1. Use wm show state to see what knowledge is available");
+            results.push("2. Use wm compile to get relevant context for current work");
+            results.push("3. Ask user what specific area they want to dive into");
+            results.push("4. Gather context from: past sessions, code, docs, and working memory");
+            results.push("5. Present synthesized dive pack with key insights and open questions");
+            results.push("```");
+          } else {
+            results.push("✓ .opencode/command/ exists");
           }
 
           return results.join("\n");
@@ -267,8 +309,6 @@ Use 'bottle-init' to initialize all components.`;
   };
 };
 
-// Export orchestration plugin + child plugins as array
-// This ensures users get bottle-* tools AND ba-*/wm-*/superego-* tools
-export const Bottle: Plugin[] = [BottleOrchestration, BA, WM, Superego];
-
-export default Bottle;
+// Export only the orchestration plugin
+// Child plugins (ba, wm, superego) should be loaded separately in opencode.json
+export default BottleOrchestration;
