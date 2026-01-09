@@ -199,33 +199,50 @@ This project uses Cloud Atlas AI tools integrated with OpenCode.
 
           // Install key commands in .opencode/command/
           const commandDir = join(directory, ".opencode", "command");
-          if (!existsSync(commandDir)) {
+          const superegCommand = join(commandDir, "superego-review.md");
+          const wmDiveCommand = join(commandDir, "wm-dive-prep.md");
+
+          const commandsToCreate = [];
+          if (!existsSync(superegCommand)) commandsToCreate.push("superego-review.md");
+          if (!existsSync(wmDiveCommand)) commandsToCreate.push("wm-dive-prep.md");
+
+          if (commandsToCreate.length > 0) {
             results.push("");
-            results.push("AI: Create .opencode/command/ directory and add these key commands:");
+            results.push(`AI: Create .opencode/command/ directory (if missing) and add these commands: ${commandsToCreate.join(", ")}`);
             results.push("");
-            results.push("📝 .opencode/command/superego-review.md:");
-            results.push("```markdown");
-            results.push("# Superego Review");
-            results.push("");
-            results.push("Run metacognitive review of current work:");
-            results.push("1. Use sg-review to get feedback on current approach");
-            results.push("2. Review the feedback critically");
-            results.push("3. Either incorporate suggestions or discuss with user if feedback seems off-track");
-            results.push("```");
-            results.push("");
-            results.push("📝 .opencode/command/wm-dive-prep.md:");
-            results.push("```markdown");
-            results.push("# WM Dive Prep");
-            results.push("");
-            results.push("Prepare a grounded dive session with context from multiple sources:");
-            results.push("1. Use wm show state to see what knowledge is available");
-            results.push("2. Use wm compile to get relevant context for current work");
-            results.push("3. Ask user what specific area they want to dive into");
-            results.push("4. Gather context from: past sessions, code, docs, and working memory");
-            results.push("5. Present synthesized dive pack with key insights and open questions");
-            results.push("```");
+
+            if (commandsToCreate.includes("superego-review.md")) {
+              results.push("📝 .opencode/command/superego-review.md:");
+              results.push("```markdown");
+              results.push("---");
+              results.push("description: Run metacognitive review of current work");
+              results.push("---");
+              results.push("");
+              results.push("Run metacognitive review:");
+              results.push("1. Use sg-review to get feedback on current approach");
+              results.push("2. Review the feedback critically");
+              results.push("3. Either incorporate suggestions or discuss with user if feedback seems off-track");
+              results.push("```");
+              results.push("");
+            }
+
+            if (commandsToCreate.includes("wm-dive-prep.md")) {
+              results.push("📝 .opencode/command/wm-dive-prep.md:");
+              results.push("```markdown");
+              results.push("---");
+              results.push("description: Prepare grounded dive session with context");
+              results.push("---");
+              results.push("");
+              results.push("Prepare a grounded dive session with context from multiple sources:");
+              results.push("1. Use wm show state to see what knowledge is available");
+              results.push("2. Use wm compile to get relevant context for current work");
+              results.push("3. Ask user what specific area they want to dive into");
+              results.push("4. Gather context from: past sessions, code, docs, and working memory");
+              results.push("5. Present synthesized dive pack with key insights and open questions");
+              results.push("```");
+            }
           } else {
-            results.push("✓ .opencode/command/ exists");
+            results.push("✓ Convenience commands installed");
           }
 
           return results.join("\n");
