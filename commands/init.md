@@ -70,10 +70,31 @@ After individual inits complete:
 
 ## Step 4: Create/update AGENTS.md
 
-Create AGENTS.md with guidance for all initialized tools:
-- Add sections for ba, wm, and superego
-- Include "When to use" and "Protocol" guidance for each
-- If AGENTS.md already exists, preserve user content while updating tool sections
+Create AGENTS.md with guidance for all initialized tools. **Start with dive-first quick start:**
+
+```markdown
+# Cloud Atlas AI Stack
+
+## Quick Start: Dive First
+
+**No dive is too small for a dive prep.** The metaphor comes from scuba diving: you prep before you dive, you don't just splash in. Even a quick bug fix benefits from explicit intent.
+
+Start every session with a dive:
+```
+/dive-prep --intent fix     # Bug fix
+/dive-prep --intent plan    # Design work
+/dive-prep --intent explore # Understanding code
+```
+
+This creates `.wm/dive_context.md` with your intent, relevant context, and suggested workflow. The 30 seconds of setup prevents 30 minutes of drift.
+```
+
+Then add sections for each tool:
+- **ba**: Task tracking with "When to use" and "Protocol" guidance
+- **wm**: Working memory with dive terminology (dive-prep = action, dive pack = reusable bundle, dive context = session manifest)
+- **superego**: Metacognition in pull mode
+
+If AGENTS.md already exists, preserve user content while updating tool sections
 
 ## Step 5: Confirm completion
 
@@ -90,15 +111,19 @@ Configuration:
   • superego mode: pull (recommended)
   • AGENTS.md: Updated with tool guidance
 
-Quick start:
-  ba create "Your first task" -t task
-  ba ready
-  ba claim <id> --session $SESSION_ID
+Quick start - dive first:
+  /dive-prep --intent fix       # Start a focused session
+  ba claim <task-id>            # Claim your task
+  # ... do your work ...
+  /superego:review              # Get feedback before committing
+
+No dive is too small for a dive prep. The 30 seconds of setup
+prevents 30 minutes of drift.
 
 Tools work together:
+  • wm preps your dive context
   • ba tracks your work
-  • superego reviews before commits (/superego:review)
-  • wm captures learnings automatically
+  • superego reviews before commits
 ```
 
 ---

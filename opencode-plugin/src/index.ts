@@ -159,6 +159,19 @@ const BottleOrchestration: Plugin = async ({ directory }) => {
 
 This project uses Cloud Atlas AI tools integrated with OpenCode.
 
+## Quick Start: Dive First
+
+**No dive is too small for a dive prep.** The metaphor comes from scuba diving: you prep before you dive, you don't just splash in. Even a quick bug fix benefits from explicit intent.
+
+Start every session with a dive:
+\`\`\`
+wm dive-prep --intent fix     # Bug fix
+wm dive-prep --intent plan    # Design work
+wm dive-prep --intent explore # Understanding code
+\`\`\`
+
+This creates \`.wm/dive_context.md\` with your intent, relevant context, and suggested workflow. The 30 seconds of setup prevents 30 minutes of drift.
+
 ## Task Tracking (ba)
 
 **Available tools:** ba-status, ba-list, ba-create, ba-claim, ba-finish, ba-block
@@ -170,13 +183,18 @@ This project uses Cloud Atlas AI tools integrated with OpenCode.
 
 ## Working Memory (wm)
 
-**Available tools:** wm compile, wm show (state|working|sessions), wm distill, wm compress
+**Available tools:** wm compile, wm show (state|working|sessions), wm distill, wm compress, wm dive-prep
 
 **Protocol:**
+- Start sessions with \`wm dive-prep\` for explicit grounding
 - Use wm compile to get relevant context for current work
-- If you don't know why/how something works: Check wm show state or encourage user to prep a dive pack
 - After completing work: Use wm distill to extract learnings
 - Working memory accumulates tacit knowledge across sessions automatically
+
+**Dive terminology:**
+- **dive-prep** = the action of preparing (the command)
+- **dive pack** = reusable context bundle (stored in OH)
+- **dive context** = the manifest file for current session (\`.wm/dive_context.md\`)
 
 ## Metacognition (superego)
 
