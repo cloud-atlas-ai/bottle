@@ -2,7 +2,47 @@
 
 **Cloud Atlas AI - One entry point for all the tools**
 
-Bottle provides the complete Cloud Atlas AI stack for both **Claude Code** and **OpenCode**:
+Bottle provides the complete Cloud Atlas AI stack for both **Claude Code** and **OpenCode**.
+
+---
+
+## Ecosystem Vision
+
+Bottle is part of the Cloud Atlas AI ecosystem - tools that give you AI superpowers without surrendering your mind. The ecosystem has two delivery mechanisms serving different audiences:
+
+```
+Open Horizons (strategic layer - missions, guardrails, metis)
+    |
+    +-- Bottle (developer tools)
+    |       CLI tools that augment AI coding assistants
+    |       You use these TO BUILD software
+    |
+    +-- Memex (end user product)
+            Desktop app that IS the AI interface
+            Knowledge workers use this directly
+```
+
+**Bottle tools** augment Claude Code and OpenCode with:
+- **Intentional grounding** (wm/dive-prep) - Start sessions with relevant context
+- **Semantic recall** (datasphere) - Search past knowledge
+- **Metacognitive oversight** (superego) - Catch drift before it compounds
+- **Strategic alignment** (oh-mcp) - Connect to your mission hierarchy
+- **Task tracking** (ba) - Simple work management
+- **Remote orchestration** (miranda) - Control sessions via Telegram
+
+**Memex** implements the same concepts natively for end users:
+- **Dive** = intentional grounding (native)
+- **Datasphere** = semantic recall (native)
+- **Superego** = metacognitive oversight (native)
+- **OH-local** = strategic alignment (native)
+
+The philosophy is shared: grounding prevents drift, recall surfaces relevant knowledge, oversight catches mistakes, and strategic context keeps you aligned with what matters.
+
+We use bottle tools to build Memex. Memex will be the finished product for knowledge workers who want AI without the command line.
+
+---
+
+## Tools
 
 - **ba** - Task tracking for AI sessions
 - **wm** - Working memory for automatic tacit knowledge extraction
