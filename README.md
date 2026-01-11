@@ -34,11 +34,19 @@ Add to your `opencode.json`:
 - "use bottle-init to set up the full Cloud Atlas AI stack"
 
 Bottle will automatically:
+- Add child plugins (ba-opencode, wm-opencode, superego-opencode) to opencode.json
 - Detect missing binaries (ba, wm, sg)
 - Offer to install them via homebrew or cargo
 - Initialize each tool
 - Set recommended defaults (e.g., superego pull mode)
 - Create AGENTS.md with usage guidance
+- Install convenience commands (superego-review, wm-dive-prep)
+
+**Note:** After bottle-init updates opencode.json, restart OpenCode to load the child plugins.
+
+**Convenience commands:**
+- `superego-review` - Run metacognitive review of current work
+- `wm-dive-prep` - Prepare a grounded dive session with context
 
 See [opencode-plugin/README.md](./opencode-plugin/README.md) for full OpenCode documentation.
 

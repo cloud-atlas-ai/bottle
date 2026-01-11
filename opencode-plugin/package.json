@@ -1,6 +1,6 @@
 {
   "name": "@cloud-atlas-ai/bottle",
-  "version": "0.2.2",
+  "version": "0.2.6",
   "description": "Cloud Atlas AI core stack for OpenCode - ba, wm, and superego in one package",
   "type": "module",
   "main": "dist/index.js",
